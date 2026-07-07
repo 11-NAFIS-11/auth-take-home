@@ -23,15 +23,15 @@
     "Set a new password": "קביעת סיסמא חדשה",
     "Saving…": "שומר…",
     "Two-factor verification": "אימות דו-שלבי",
-    "We sent a 6-digit code to": "שלחנו קוד בן 6 ספרות לכתובת",
-    "6-digit code": "קוד בן 6 ספרות",
+    "We sent a 4-digit code to": "שלחנו קוד בן 4 ספרות לכתובת",
     "Verify": "אימות",
     "Verifying…": "מאמת…",
     "Didn't get a code?": "לא קיבלת קוד?",
-    "Resend code": "שליחה חוזרת של הקוד",
-    "Resend in": "שליחה חוזרת בעוד",
+    "Resend code": "שליחת קוד חוזר",
     "Hello World": "שלום עולם",
     "You're signed in as": "מחובר בתור",
     "Log out": "התנתקות",
-    "When quantity meets quality": "כשכמות פוגשת איכות"
+    "Password changed successfully!": "הסיסמה הוחלפה בהצלחה!",
+    "You can now log in using your new password.": "ניתן להתחבר כעת באמצעות הסיסמה החדשה.",
+    "Go to login": "מעבר לדף כניסה למערכת"
 }

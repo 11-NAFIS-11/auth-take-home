@@ -53,7 +53,7 @@ class TwoFactorChallengeController extends Controller
         }
 
         $request->validate([
-            'code' => ['required', 'string', 'size:6'],
+            'code' => ['required', 'string', 'size:4'],
         ], [
             'code.size' => __('auth.two_factor_code_format'),
         ]);

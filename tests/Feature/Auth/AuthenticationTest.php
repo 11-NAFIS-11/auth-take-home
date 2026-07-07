@@ -79,7 +79,7 @@ class AuthenticationTest extends TestCase
             'password' => 'password',
         ]);
 
-        $response = $this->post('/two-factor-challenge', ['code' => '000000']);
+        $response = $this->post('/two-factor-challenge', ['code' => '0000']);
 
         $this->assertGuest();
         $response->assertSessionHasErrors('code');

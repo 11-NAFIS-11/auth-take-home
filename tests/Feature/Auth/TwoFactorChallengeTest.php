@@ -29,7 +29,7 @@ class TwoFactorChallengeTest extends TestCase
 
         $user->forceFill(['two_factor_expires_at' => now()->subMinute()])->save();
 
-        $response = $this->post('/two-factor-challenge', ['code' => '123456']);
+        $response = $this->post('/two-factor-challenge', ['code' => '1234']);
 
         $this->assertGuest();
         $response->assertRedirect(route('login'));
@@ -45,7 +45,7 @@ class TwoFactorChallengeTest extends TestCase
         $this->post('/login', ['email' => $user->email, 'password' => 'password']);
 
         for ($i = 0; $i < 5; $i++) {
-            $this->post('/two-factor-challenge', ['code' => '000000']);
+            $this->post('/two-factor-challenge', ['code' => '0000']);
         }
 
         $this->assertGuest();

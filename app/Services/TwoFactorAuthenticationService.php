@@ -31,7 +31,7 @@ class TwoFactorAuthenticationService
      */
     public function generateAndSend(User $user): void
     {
-        $code = (string) random_int(100000, 999999);
+        $code = str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT);
 
         $user->forceFill([
             'two_factor_code' => Hash::make($code),

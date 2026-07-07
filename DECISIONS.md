@@ -2,6 +2,18 @@
 
 This documents the non-obvious choices made while building this module, and why — written so I can explain and defend each one.
 
+## Visual design: revised mid-build against clearer references
+
+The first pass at the auth UI was reconstructed from the assignment PDF's embedded screenshot (compressed, low-resolution), which produced a reasonable but imprecise approximation: a centered brand+tagline block, an indigo-tinted card, plain text inputs, and a single 6-digit text field for 2FA. Partway through, clearer reference exports surfaced showing the actual design more precisely, which corrected several things:
+
+- **Brand name**: the PDF screenshot read as "KREISBERG"; the clearer exports show "QuantiTop" (a pun on "quantity" + "top," matching the tagline "when quantity meets quality"). Went with the clearer source.
+- **Header layout**: the brand name lives in a top header row opposite the language switcher, not in a separate centered block above the card — the card is the only centered element.
+- **Card style**: white background with a blue top accent border, not an indigo-tinted card.
+- **Inputs**: leading icons (envelope / lock) inside the field, using logical positioning (`start-0`, `ps-10`) so they land on the correct side in both LTR and RTL.
+- **2FA code entry**: four individual boxed digit inputs with auto-advance-on-type, backspace-to-previous, and paste support, instead of one plain text field — matching the reference's boxed-OTP pattern. The code length was changed from 6 to 4 digits to match; the box-order stays strictly left-to-right (`dir="ltr"` on the box row) even in Hebrew, same reasoning as the numeric code in the email template.
+- **Password reset now ends on a dedicated success screen** (checkmark icon + confirmation copy + a button to login) rather than silently redirecting straight to the login page with a flash message — this matches the reference and is arguably better UX regardless (an explicit "it worked" state instead of an implicit one).
+- The background cityscape image is still a CSS/SVG reconstruction, not the real photo asset — kept as-is by choice, since the mood/composition match was judged close enough without needing the literal file.
+
 ## Scaffold: Laravel Breeze (Vue + Inertia stack)
 
 Rather than wiring Inertia/session auth from scratch, I started from `laravel/breeze`'s Vue+Inertia stack. It's the standard, reviewer-recognizable pattern for this exact stack, and the well-solved plumbing (session auth, CSRF, password broker, form requests) isn't worth reinventing. Everything beyond that baseline — 2FA, the i18n layer, the visual design, the security hardening — is custom and I can walk through any of it.
@@ -60,5 +72,4 @@ One consequence of moving to Render: rather than gambling on whether its free-ti
 ## Known limitations
 
 - The PHPUnit suite (18 tests) covers the auth flows' behavior at the HTTP/session layer (login defers `Auth::login()` until 2FA passes, the attempt cap, expiry, resend cooldown, password reset). It does not cover the Vue components directly — the UI/UX layer (loading states, RTL mirroring, translated copy) was instead verified with a scripted Playwright browser walkthrough (see README), which is what caught the locale-persistence-after-logout bug described above.
-- The cityscape image on the login/auth screens is a CSS/SVG reconstruction of the reference screenshot's mood (dark skyline, grid overlay, soft glow), not the original Figma asset — I couldn't authenticate into the linked Figma file to export it directly, so I rebuilt the visual impression from the screenshot embedded in the assignment PDF instead of substituting an unrelated stock photo.
 - On Render's free tier, the app cold-starts after ~15 minutes of inactivity — the first request after idling (including the reviewer's first page load) can take 10-30 seconds. This is a hosting-tier trade-off, not an application issue.

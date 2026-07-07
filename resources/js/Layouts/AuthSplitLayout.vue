@@ -1,12 +1,9 @@
 <script setup>
 import LocaleSwitcher from '@/Components/LocaleSwitcher.vue';
-import { useTrans } from '@/composables/useTrans';
 
 defineProps({
     title: { type: String, required: true },
 });
-
-const { t } = useTrans();
 </script>
 
 <template>
@@ -17,23 +14,21 @@ const { t } = useTrans();
             <div class="glow absolute bottom-24 start-16 h-24 w-24 rounded-full" aria-hidden="true" />
         </div>
 
-        <div class="relative flex flex-1 flex-col items-center justify-center px-6 py-12 sm:px-12">
-            <div class="absolute end-6 top-6">
+        <div class="relative flex flex-1 flex-col px-6 py-8 sm:px-10">
+            <div class="flex items-center justify-between">
+                <p class="text-lg font-semibold tracking-wide text-slate-900">QuantiTop</p>
                 <LocaleSwitcher />
             </div>
 
-            <div class="w-full max-w-sm">
-                <div class="mb-8 text-center">
-                    <p class="text-2xl font-semibold tracking-wide text-slate-900">KREISBERG</p>
-                    <p class="mt-1 text-xs text-slate-400">{{ t('When quantity meets quality') }}</p>
-                </div>
+            <div class="flex flex-1 flex-col items-center justify-center py-8">
+                <div class="w-full max-w-sm">
+                    <div class="rounded-2xl border-t-4 border-blue-600 bg-white p-8 shadow-lg shadow-slate-200/50 ring-1 ring-slate-100">
+                        <h1 class="mb-6 text-center text-lg font-bold text-blue-700">
+                            {{ title }}
+                        </h1>
 
-                <div class="rounded-2xl border border-indigo-100 bg-indigo-50/60 p-8 shadow-sm">
-                    <h1 class="mb-6 text-center text-lg font-bold text-slate-800">
-                        {{ title }}
-                    </h1>
-
-                    <slot />
+                        <slot />
+                    </div>
                 </div>
             </div>
         </div>
