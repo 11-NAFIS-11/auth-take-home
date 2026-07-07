@@ -11,7 +11,7 @@ class SetLocale
 {
     private const SUPPORTED = ['en', 'he'];
 
-    private const DEFAULT = 'en';
+    private const DEFAULT = 'he';
 
     /**
      * The session is authoritative during a browsing session, but session
