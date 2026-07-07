@@ -1,20 +1,32 @@
 <script setup>
 import LocaleSwitcher from '@/Components/LocaleSwitcher.vue';
+import { useTrans } from '@/composables/useTrans';
 
 defineProps({
     title: { type: String, required: true },
 });
+
+const { isRtl } = useTrans();
 </script>
 
 <template>
-    <div class="relative flex min-h-screen flex-col bg-white lg:flex-row">
+    <!--
+        This outer split is forced to a fixed left-to-right order (image panel
+        always on the left, form panel always on the right) regardless of
+        locale — the reference design keeps this macro layout fixed and only
+        mirrors the text/content inside the form panel. Without this explicit
+        dir="ltr", the ambient RTL direction from <html dir="rtl"> would flip
+        the visual order of these two flex children, which is not what the
+        reference shows.
+    -->
+    <div class="relative flex min-h-screen flex-col bg-white lg:flex-row" dir="ltr">
         <div class="relative hidden overflow-hidden bg-slate-950 lg:block lg:w-3/5">
             <div class="cityscape absolute inset-0" aria-hidden="true" />
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" aria-hidden="true" />
             <div class="glow absolute bottom-24 start-16 h-24 w-24 rounded-full" aria-hidden="true" />
         </div>
 
-        <div class="relative flex flex-1 flex-col px-6 py-8 sm:px-10">
+        <div class="relative flex flex-1 flex-col px-6 py-8 sm:px-10" :dir="isRtl ? 'rtl' : 'ltr'">
             <div class="flex items-center justify-between">
                 <p class="text-lg font-semibold tracking-wide text-slate-900">QuantiTop</p>
                 <LocaleSwitcher />
