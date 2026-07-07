@@ -53,28 +53,27 @@ MAIL_FROM_ADDRESS=your-gmail-address@gmail.com
 - **Hello World landing page** — the only page behind `auth`, shown once 2FA succeeds.
 - **English / Hebrew (RTL)** — a language switcher persists the choice in session + a long-lived cookie (so it survives logout), and the whole layout mirrors for Hebrew via Tailwind's logical-property utilities (`ms-`/`me-`/`ps-`/`pe-`/`start-`/`end-`).
 
-## Deployment (Railway)
+## Deployment (Render)
 
-The app deploys as a standard Laravel project — Railway's Nixpacks builder auto-detects `composer.json` and `package.json` and runs `composer install` + `npm run build` during the build step. A `Procfile` pins the start command:
+Railway was the original target but requires a paid plan (trial credits expired on this account); Render's free tier doesn't need a card, so that's what this is actually deployed on. See DECISIONS.md for the full reasoning.
 
-```
-web: php artisan migrate --force && php artisan serve --host 0.0.0.0 --port $PORT
-```
+The built frontend assets (`public/build/`) are **committed to this repo** rather than built on the server — this removes Node.js entirely from the production build step, which matters because Render's free-tier PHP environment isn't guaranteed to have Node available, and a Docker multi-stage build couldn't be tested locally before relying on it for the actual submission. This means: **after any change to `resources/js` or `resources/css`, run `npm run build` and commit the updated `public/build/` before deploying.**
 
 Steps:
 
-1. On [railway.app](https://railway.app), create a new project from this GitHub repo.
-2. Add a MySQL (or Postgres) database plugin to the project.
+1. On [render.com](https://render.com), create a new **PostgreSQL** instance (free tier) first, and note its connection details.
+2. Create a new **Web Service** from this GitHub repo.
+   - Build command: `composer install --no-dev --optimize-autoloader`
+   - Start command: `php artisan migrate --force && php artisan serve --host 0.0.0.0 --port $PORT`
 3. Set environment variables on the web service:
    - `APP_KEY` — generate locally with `php artisan key:generate --show` and paste the value.
-   - `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://<your-railway-domain>`
-   - `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` — copied from the database plugin's connection details.
+   - `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://<your-render-domain>`
+   - `DB_CONNECTION=pgsql`, plus `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` from the Postgres instance's connection details.
    - `SESSION_SECURE_COOKIE=true` (the app is served over HTTPS in production).
    - `MAIL_MAILER=smtp`, `MAIL_HOST=smtp.gmail.com`, `MAIL_PORT=587`, `MAIL_ENCRYPTION=tls`, `MAIL_USERNAME`, `MAIL_PASSWORD` (Gmail App Password), `MAIL_FROM_ADDRESS`, `MAIL_FROM_NAME=Kreisberg`.
-4. Generate a public domain for the service and confirm it matches `APP_URL`.
-5. Deploy, then walk through register → 2FA → dashboard → logout → login → forgot password on the live URL before sharing it.
+4. Deploy, then walk through register → 2FA → dashboard → logout → login → forgot password on the live URL before sharing it.
 
-`php artisan serve` is a single-process dev server — acceptable per the assignment's "demo server, not production-grade" allowance, but worth naming as a known limitation rather than presenting it as a production setup.
+`php artisan serve` is a single-process dev server — acceptable per the assignment's "demo server, not production-grade" allowance, but worth naming as a known limitation rather than presenting it as a production setup. A `Procfile` is also kept in the repo in case deployment moves back to Railway or another Procfile-based host later.
 
 ## Tests / verification
 
