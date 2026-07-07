@@ -27,7 +27,16 @@ const { isRtl } = useTrans();
         </div>
 
         <div class="relative flex flex-1 flex-col px-6 py-8 sm:px-10" :dir="isRtl ? 'rtl' : 'ltr'">
-            <div class="flex items-center justify-between">
+            <!--
+                Pinned to dir="rtl" unconditionally (not tied to the current
+                locale) so the switcher always renders on the left and the
+                brand name always on the right, in both languages — matching
+                every reference screenshot provided. Without this override,
+                this row would inherit the parent's locale-driven dir and
+                mirror sides when switching to English, which is the same
+                class of bug as the outer split-panel fix above.
+            -->
+            <div class="flex items-center justify-between" dir="rtl">
                 <p class="text-lg font-semibold tracking-wide text-slate-900">QuantiTop</p>
                 <LocaleSwitcher />
             </div>
