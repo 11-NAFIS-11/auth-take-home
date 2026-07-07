@@ -1,0 +1,9 @@
+.git
+.gitignore
+node_modules
+vendor
+.env
+database/database.sqlite
+public/hot
+storage/logs/*
+!storage/logs/.gitignore
