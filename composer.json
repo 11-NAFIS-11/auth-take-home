@@ -1,6 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "kreisberg/auth-take-home",
+    "name": "quantitop/auth-take-home",
     "type": "project",
     "description": "Authentication module take-home assignment (Laravel + Vue + Inertia).",
     "keywords": ["laravel", "vue", "inertia", "authentication"],

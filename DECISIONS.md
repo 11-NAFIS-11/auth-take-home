@@ -23,7 +23,7 @@ I then **removed** the parts of the default scaffold the spec doesn't ask for: e
 ## Two-factor authentication design
 
 - **Storage**: four columns added directly to `users` (`two_factor_code` hashed, `two_factor_expires_at`, `two_factor_attempts`, `two_factor_last_sent_at`) rather than a separate table. A user only ever has one *active* challenge at a time, so a separate table would just add joins for no benefit.
-- **Code**: 6-digit numeric (`random_int(100000, 999999)`), hashed with `Hash::make()` before storage — the plaintext only ever exists in the email itself, never logged or persisted.
+- **Code**: 4-digit numeric (`random_int(0, 9999)`, zero-padded), hashed with `Hash::make()` before storage — the plaintext only ever exists in the email itself, never logged or persisted. Originally 6 digits with a single text field; changed to 4 digits with individual boxed inputs to match the precise reference design that surfaced mid-build (see "Visual design" above).
 - **Expiry**: 10 minutes.
 - **Attempts**: capped at 5 wrong guesses; exceeding it invalidates the code and forces the user back to a fresh login (rather than silently letting them keep guessing).
 - **Resend**: 60-second cooldown enforced server-side (via `two_factor_last_sent_at`), independent of the route-level `throttle` middleware — the cooldown is the actual UX-facing rate limit; the route throttle is a coarser backstop.

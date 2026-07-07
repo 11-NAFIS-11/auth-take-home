@@ -18,7 +18,7 @@ const { t } = useTrans();
 
     <div class="flex min-h-screen flex-col bg-slate-50">
         <header class="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
-            <p class="text-lg font-semibold tracking-wide text-slate-900">KREISBERG</p>
+            <p class="text-lg font-semibold tracking-wide text-slate-900">QuantiTop</p>
             <LocaleSwitcher />
         </header>
 
