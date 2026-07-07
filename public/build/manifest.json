@@ -1,127 +1,127 @@
 {
-  "_InputError-C8HEeSvU.js": {
-    "file": "assets/InputError-C8HEeSvU.js",
+  "_InputError-dPGVVvyt.js": {
+    "file": "assets/InputError-dPGVVvyt.js",
     "name": "InputError",
     "imports": [
       "resources/js/app.js"
     ]
   },
-  "_LocaleSwitcher-C9F6XCYz.js": {
-    "file": "assets/LocaleSwitcher-C9F6XCYz.js",
+  "_LocaleSwitcher-CVhhjwd7.js": {
+    "file": "assets/LocaleSwitcher-CVhhjwd7.js",
     "name": "LocaleSwitcher",
     "imports": [
       "resources/js/app.js"
     ]
   },
-  "_PrimaryButton-ChwpbbzL.js": {
-    "file": "assets/PrimaryButton-ChwpbbzL.js",
+  "_PrimaryButton-BDOMuV1a.js": {
+    "file": "assets/PrimaryButton-BDOMuV1a.js",
     "name": "PrimaryButton",
     "imports": [
-      "_LocaleSwitcher-C9F6XCYz.js",
+      "_LocaleSwitcher-CVhhjwd7.js",
       "resources/js/app.js"
     ],
     "assets": [
-      "assets/auth-background-Ti6dNCp1.png"
+      "assets/auth-background-DGh48MlL.png"
     ]
   },
-  "_TextInput-C8RCqRj1.js": {
-    "file": "assets/TextInput-C8RCqRj1.js",
+  "_TextInput-0LoOp4lR.js": {
+    "file": "assets/TextInput-0LoOp4lR.js",
     "name": "TextInput",
     "imports": [
       "resources/js/app.js"
     ]
   },
   "resources/images/auth-background.png": {
-    "file": "assets/auth-background-Ti6dNCp1.png",
+    "file": "assets/auth-background-DGh48MlL.png",
     "src": "resources/images/auth-background.png"
   },
   "resources/js/Pages/Auth/ForgotPassword.vue": {
-    "file": "assets/ForgotPassword-DwhEeEus.js",
+    "file": "assets/ForgotPassword-CPndkO3P.js",
     "name": "ForgotPassword",
     "src": "resources/js/Pages/Auth/ForgotPassword.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_PrimaryButton-ChwpbbzL.js",
-      "_InputError-C8HEeSvU.js",
-      "_TextInput-C8RCqRj1.js",
-      "_LocaleSwitcher-C9F6XCYz.js"
+      "_PrimaryButton-BDOMuV1a.js",
+      "_InputError-dPGVVvyt.js",
+      "_TextInput-0LoOp4lR.js",
+      "_LocaleSwitcher-CVhhjwd7.js"
     ]
   },
   "resources/js/Pages/Auth/Login.vue": {
-    "file": "assets/Login-BiMYqmk0.js",
+    "file": "assets/Login-BNX0NQUt.js",
     "name": "Login",
     "src": "resources/js/Pages/Auth/Login.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_PrimaryButton-ChwpbbzL.js",
-      "_InputError-C8HEeSvU.js",
-      "_TextInput-C8RCqRj1.js",
-      "_LocaleSwitcher-C9F6XCYz.js"
+      "_PrimaryButton-BDOMuV1a.js",
+      "_InputError-dPGVVvyt.js",
+      "_TextInput-0LoOp4lR.js",
+      "_LocaleSwitcher-CVhhjwd7.js"
     ]
   },
   "resources/js/Pages/Auth/Register.vue": {
-    "file": "assets/Register-DVkQCjQ6.js",
+    "file": "assets/Register-D7RTE9m7.js",
     "name": "Register",
     "src": "resources/js/Pages/Auth/Register.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_PrimaryButton-ChwpbbzL.js",
-      "_InputError-C8HEeSvU.js",
-      "_TextInput-C8RCqRj1.js",
-      "_LocaleSwitcher-C9F6XCYz.js"
+      "_PrimaryButton-BDOMuV1a.js",
+      "_InputError-dPGVVvyt.js",
+      "_TextInput-0LoOp4lR.js",
+      "_LocaleSwitcher-CVhhjwd7.js"
     ]
   },
   "resources/js/Pages/Auth/ResetPassword.vue": {
-    "file": "assets/ResetPassword-BG_Rg3Ow.js",
+    "file": "assets/ResetPassword-DKK7rPmw.js",
     "name": "ResetPassword",
     "src": "resources/js/Pages/Auth/ResetPassword.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_PrimaryButton-ChwpbbzL.js",
-      "_InputError-C8HEeSvU.js",
-      "_TextInput-C8RCqRj1.js",
-      "_LocaleSwitcher-C9F6XCYz.js"
+      "_PrimaryButton-BDOMuV1a.js",
+      "_InputError-dPGVVvyt.js",
+      "_TextInput-0LoOp4lR.js",
+      "_LocaleSwitcher-CVhhjwd7.js"
     ]
   },
   "resources/js/Pages/Auth/ResetPasswordSuccess.vue": {
-    "file": "assets/ResetPasswordSuccess-Dq_nXwY6.js",
+    "file": "assets/ResetPasswordSuccess-CYDLrrgz.js",
     "name": "ResetPasswordSuccess",
     "src": "resources/js/Pages/Auth/ResetPasswordSuccess.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_PrimaryButton-ChwpbbzL.js",
-      "_LocaleSwitcher-C9F6XCYz.js",
+      "_PrimaryButton-BDOMuV1a.js",
+      "_LocaleSwitcher-CVhhjwd7.js",
       "resources/js/app.js"
     ]
   },
   "resources/js/Pages/Auth/TwoFactorChallenge.vue": {
-    "file": "assets/TwoFactorChallenge-BaZXZZaO.js",
+    "file": "assets/TwoFactorChallenge-UlOF8KDP.js",
     "name": "TwoFactorChallenge",
     "src": "resources/js/Pages/Auth/TwoFactorChallenge.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_PrimaryButton-ChwpbbzL.js",
-      "_InputError-C8HEeSvU.js",
-      "_LocaleSwitcher-C9F6XCYz.js"
+      "_PrimaryButton-BDOMuV1a.js",
+      "_InputError-dPGVVvyt.js",
+      "_LocaleSwitcher-CVhhjwd7.js"
     ]
   },
   "resources/js/Pages/Home.vue": {
-    "file": "assets/Home-Hev7mHsQ.js",
+    "file": "assets/Home-D7aVh9ak.js",
     "name": "Home",
     "src": "resources/js/Pages/Home.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_LocaleSwitcher-C9F6XCYz.js",
+      "_LocaleSwitcher-CVhhjwd7.js",
       "resources/js/app.js"
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-aiI-4WMn.js",
+    "file": "assets/app-Djvrolo1.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
