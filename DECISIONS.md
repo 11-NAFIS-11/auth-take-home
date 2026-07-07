@@ -20,11 +20,19 @@ I then **removed** the parts of the default scaffold the spec doesn't ask for: e
 
 ## Password reset
 
-Reused Laravel's built-in password-broker flow (token generation, expiry, signed verification) rather than building it from scratch — it's already secure and well-tested. The only customization is `User::sendPasswordResetNotification()`, which swaps in a localized, Resend-backed notification instead of the default English-only mail.
+Reused Laravel's built-in password-broker flow (token generation, expiry, signed verification) rather than building it from scratch — it's already secure and well-tested. The only customization is `User::sendPasswordResetNotification()`, which swaps in a localized notification instead of the default English-only mail. Because it goes through Laravel's standard `Mail`/`Notification` facades, it's provider-agnostic — the actual transport (see below) was swapped twice without touching this code at all.
 
-## Email
+## Email provider: three attempts, here's why
 
-**Resend** was chosen as the provider: Laravel 10.11+ ships a native `resend` mail transport, so wiring it up is `composer require resend/resend-php` plus two env vars — no custom HTTP client code. Locally, `MAIL_MAILER=log` is the default so 2FA codes and reset links land in `storage/logs/laravel.log` instead of requiring a live API key just to develop. Mail is sent **synchronously** (not queued) — queuing would need a worker process running continuously in the deployed environment, which is unnecessary infrastructure for a demo server and would risk a 2FA email silently sitting in an unprocessed queue if the worker isn't running.
+The provider went through three candidates before landing on one that actually satisfies the spec's requirement that "the reviewer must be able to test... on the deployed version" — i.e., a real inbox that isn't mine has to receive real mail.
+
+1. **Resend** (first choice) — Laravel ships a native `resend` transport, so integration is trivial (`composer require resend/resend-php` + two env vars). But Resend's sandbox mode only allows sending to the account owner's own verified email until a *domain* is verified via DNS. The domain available for this account (a university subdomain, `diu.edu`) isn't one we control the DNS for, so verification could never complete — a dead end that had nothing to do with the code and everything to do with account/domain ownership.
+2. **SendGrid** (second choice) — only requires single-sender email verification, not domain/DNS, which looked like the fix. Twilio's automated account vetting rejected the signup outright with no specifics and no appeal path.
+3. **Gmail SMTP** (final choice) — no vetting process, works immediately, and — critically — was verified to deliver to a mailbox that is *not* the sending account (see verification log), which is the actual property the spec requires. The trade-off: Gmail's SMTP relay caps at ~500 messages/day and looks less "enterprise" than a dedicated transactional provider, but for a review-scale demo that ceiling is a non-issue.
+
+This is documented in this much detail deliberately: the interesting engineering judgment here wasn't which provider's API to call (that part is one line in `.env` either way), it was recognizing that "email works" and "the *reviewer* can receive email" are different claims, and testing the second one rather than assuming it.
+
+Mail is sent **synchronously** (not queued), regardless of provider — queuing would need a worker process running continuously in the deployed environment, which is unnecessary infrastructure for a demo server and would risk a 2FA email silently sitting in an unprocessed queue if the worker isn't running.
 
 ## Localization (English / Hebrew, RTL)
 

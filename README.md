@@ -9,7 +9,7 @@ See [DECISIONS.md](DECISIONS.md) for the implementation notes and rationale behi
 - Laravel 12, Vue 3 + Inertia.js (Breeze scaffold as the starting point)
 - Tailwind CSS
 - SQLite locally, MySQL/Postgres in production (swapped purely via `.env`)
-- [Resend](https://resend.com) for transactional email (2FA codes + password resets)
+- Gmail SMTP for transactional email (2FA codes + password resets) — see [DECISIONS.md](DECISIONS.md) for why
 
 ## Local setup
 
@@ -29,19 +29,26 @@ php artisan serve
 
 Visit `http://localhost:8000`. With the default `MAIL_MAILER=log`, 2FA codes and password-reset links are written to `storage/logs/laravel.log` instead of being emailed — open that file to find the 6-digit code or reset link while testing locally.
 
-To send real email locally, set in `.env`:
+To send real email locally, set in `.env` (see DECISIONS.md for why Gmail SMTP was chosen over Resend/SendGrid):
 
 ```
-MAIL_MAILER=resend
-RESEND_API_KEY=your-resend-api-key
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_ENCRYPTION=tls
+MAIL_USERNAME=your-gmail-address@gmail.com
+MAIL_PASSWORD=your-16-character-app-password
+MAIL_FROM_ADDRESS=your-gmail-address@gmail.com
 ```
+
+`MAIL_PASSWORD` must be a Google [App Password](https://myaccount.google.com/apppasswords) (requires 2-Step Verification on the account), not the account's normal login password.
 
 ## Features
 
 - **Login** — email/password, specific validation and server error states, loading/disabled state during submission, rate-limited.
 - **Registration** — real user creation, strong password policy, routes through the same 2FA challenge as login.
 - **Two-factor authentication (email)** — 6-digit one-time code required after valid credentials, 10-minute expiry, 5-attempt cap, 60-second resend cooldown, all with specific error copy.
-- **Forgot / reset password** — real email via Resend, signed reset link, localized email template.
+- **Forgot / reset password** — real email via Gmail SMTP, signed reset link, localized email template.
 - **Logout** — invalidates the session and rotates the CSRF token.
 - **Hello World landing page** — the only page behind `auth`, shown once 2FA succeeds.
 - **English / Hebrew (RTL)** — a language switcher persists the choice in session + a long-lived cookie (so it survives logout), and the whole layout mirrors for Hebrew via Tailwind's logical-property utilities (`ms-`/`me-`/`ps-`/`pe-`/`start-`/`end-`).
@@ -63,7 +70,7 @@ Steps:
    - `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://<your-railway-domain>`
    - `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` — copied from the database plugin's connection details.
    - `SESSION_SECURE_COOKIE=true` (the app is served over HTTPS in production).
-   - `MAIL_MAILER=resend`, `RESEND_API_KEY=...`, `MAIL_FROM_ADDRESS=...`, `MAIL_FROM_NAME=Kreisberg`.
+   - `MAIL_MAILER=smtp`, `MAIL_HOST=smtp.gmail.com`, `MAIL_PORT=587`, `MAIL_ENCRYPTION=tls`, `MAIL_USERNAME`, `MAIL_PASSWORD` (Gmail App Password), `MAIL_FROM_ADDRESS`, `MAIL_FROM_NAME=Kreisberg`.
 4. Generate a public domain for the service and confirm it matches `APP_URL`.
 5. Deploy, then walk through register → 2FA → dashboard → logout → login → forgot password on the live URL before sharing it.
 
