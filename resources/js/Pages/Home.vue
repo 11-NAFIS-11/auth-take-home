@@ -17,7 +17,8 @@ const { t } = useTrans();
     <Head :title="t('Hello World')" />
 
     <div class="flex min-h-screen flex-col bg-slate-50">
-        <header class="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
+        <!-- dir="rtl" is hardcoded (not tied to locale) so the switcher stays fixed on the left and the brand name on the right in both languages, matching the auth pages -->
+        <header class="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4" dir="rtl">
             <p class="text-lg font-semibold tracking-wide text-slate-900">QuantiTop</p>
             <LocaleSwitcher />
         </header>
