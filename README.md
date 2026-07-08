@@ -11,7 +11,7 @@ See [DECISIONS.md](DECISIONS.md) for the implementation notes and rationale behi
 - Laravel 12, Vue 3 + Inertia.js (Breeze scaffold as the starting point)
 - Tailwind CSS
 - SQLite locally, MySQL/Postgres in production (swapped purely via `.env`)
-- Gmail SMTP for transactional email (2FA codes + password resets) — see [DECISIONS.md](DECISIONS.md) for why
+- Mailjet (via a small custom HTTPS transport, `app/Mail/Transport/MailjetTransport.php`) for transactional email (2FA codes + password resets) — see [DECISIONS.md](DECISIONS.md) for why
 
 ## Local setup
 
@@ -31,26 +31,23 @@ php artisan serve
 
 Visit `http://localhost:8000`. With the default `MAIL_MAILER=log`, 2FA codes and password-reset links are written to `storage/logs/laravel.log` instead of being emailed — open that file to find the 4-digit code or reset link while testing locally.
 
-To send real email locally, set in `.env` (see DECISIONS.md for why Gmail SMTP was chosen over Resend/SendGrid):
+To send real email locally, set in `.env` (see DECISIONS.md for the full story of why Mailjet, after Resend/SendGrid/Gmail SMTP/Brevo each hit a dead end):
 
 ```
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_ENCRYPTION=tls
-MAIL_USERNAME=your-gmail-address@gmail.com
-MAIL_PASSWORD=your-16-character-app-password
-MAIL_FROM_ADDRESS=your-gmail-address@gmail.com
+MAIL_MAILER=mailjet
+MAIL_FROM_ADDRESS=your-verified-sender@example.com
+MAILJET_API_KEY=your-mailjet-api-key
+MAILJET_SECRET_KEY=your-mailjet-secret-key
 ```
 
-`MAIL_PASSWORD` must be a Google [App Password](https://myaccount.google.com/apppasswords) (requires 2-Step Verification on the account), not the account's normal login password.
+`MAILJET_API_KEY`/`MAILJET_SECRET_KEY` come from Mailjet's **Account Settings → API Key Management**, and `MAIL_FROM_ADDRESS` must be a sender verified under **Account Settings → Sender addresses and domains** (Mailjet emails a confirmation link to verify it — no domain ownership required).
 
 ## Features
 
 - **Login** — email/password, specific validation and server error states, loading/disabled state during submission, rate-limited.
 - **Registration** — real user creation, strong password policy, routes through the same 2FA challenge as login.
 - **Two-factor authentication (email)** — 4-digit one-time code required after valid credentials, 10-minute expiry, 5-attempt cap, 60-second resend cooldown, all with specific error copy.
-- **Forgot / reset password** — real email via Gmail SMTP, signed reset link, localized email template.
+- **Forgot / reset password** — real email via Mailjet, signed reset link, localized email template.
 - **Logout** — invalidates the session and rotates the CSRF token.
 - **Hello World landing page** — the only page behind `auth`, shown once 2FA succeeds.
 - **English / Hebrew (RTL)** — a language switcher persists the choice in session + a long-lived cookie (so it survives logout), and the whole layout mirrors for Hebrew via Tailwind's logical-property utilities (`ms-`/`me-`/`ps-`/`pe-`/`start-`/`end-`).
@@ -70,7 +67,8 @@ Steps:
    - `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://<your-render-domain>`
    - `DB_CONNECTION=pgsql`, `DB_URL=<the Postgres instance's Internal Database URL>` (Laravel's `config/database.php` reads a single `DB_URL` and derives host/port/database/credentials from it).
    - `SESSION_SECURE_COOKIE=true` (the app is served over HTTPS in production).
-   - `MAIL_MAILER=smtp`, `MAIL_HOST=smtp.gmail.com`, `MAIL_PORT=587`, `MAIL_ENCRYPTION=tls`, `MAIL_USERNAME`, `MAIL_PASSWORD` (Gmail App Password), `MAIL_FROM_ADDRESS`, `MAIL_FROM_NAME=QuantiTop`.
+   - `LOG_CHANNEL=stderr` (Render's log viewer only captures stdout/stderr, not files — the default `single` channel writes to a file inside the container that's invisible there).
+   - `MAIL_MAILER=mailjet`, `MAILJET_API_KEY`, `MAILJET_SECRET_KEY`, `MAIL_FROM_ADDRESS` (a verified Mailjet sender), `MAIL_FROM_NAME=QuantiTop`. Not SMTP — Render blocks outbound SMTP entirely on its free tier (see DECISIONS.md).
 4. Deploy, then walk through register → 2FA → dashboard → logout → login → forgot password on the live URL before sharing it.
 
 `php artisan serve` is a single-process dev server — acceptable per the assignment's "demo server, not production-grade" allowance, but worth naming as a known limitation rather than presenting it as a production setup. A `Procfile` is also kept in the repo in case deployment moves to Railway or another Procfile-based host later.

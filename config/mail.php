@@ -65,6 +65,16 @@ return [
             'transport' => 'resend',
         ],
 
+        // Custom transport (see App\Mail\Transport\MailjetTransport) — Laravel
+        // has no built-in Mailjet driver, and Mailjet is used specifically
+        // because it sends over HTTPS (unlike SMTP, which Render blocks
+        // outbound on its free tier).
+        'mailjet' => [
+            'transport' => 'mailjet',
+            'key' => env('MAILJET_API_KEY'),
+            'secret' => env('MAILJET_SECRET_KEY'),
+        ],
+
         'sendmail' => [
             'transport' => 'sendmail',
             'path' => env('MAIL_SENDMAIL_PATH', '/usr/sbin/sendmail -bs -i'),
